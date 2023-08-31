@@ -1,0 +1,83 @@
+import tkinter as tk
+from tkinter import messagebox, simpledialog
+
+
+class Car:
+    def __init__(self, brand, model):
+        self.brand = brand
+        self.model = model
+
+
+class CarShowroom:
+    def __init__(self):
+        self.cars = []
+        self.prices = {
+            "Toyota": 200000,
+            "Corolla": 200000,
+            "Honda": 250000,
+            "Civic": 250000,
+            "BMW": 300000,
+            "Mercedes": 300000
+        }
+
+        self.root = tk.Tk()
+        self.root.title("Car Showroom")
+
+        self.name_label = tk.Label(self.root, text="Name:")
+        self.name_label.pack()
+        self.name_entry = tk.Entry(self.root)
+        self.name_entry.pack()
+
+        self.age_label = tk.Label(self.root, text="Age:")
+        self.age_label.pack()
+        self.age_entry = tk.Entry(self.root)
+        self.age_entry.pack()
+
+        self.amount_label = tk.Label(self.root, text="Amount:")
+        self.amount_label.pack()
+        self.amount_entry = tk.Entry(self.root)
+        self.amount_entry.pack()
+
+        self.select_button = tk.Button(self.root, text="Select Car", command=self.select_car)
+        self.select_button.pack()
+
+        self.root.mainloop()
+
+    def select_car(self):
+        name = self.name_entry.get()
+        age = self.age_entry.get()
+        amount = int(self.amount_entry.get())
+
+        if amount < 100000 or amount > 1000000:
+            messagebox.showerror("Error", "Please enter a valid amount")
+            return
+
+        if 100000 <= amount <= 200000:
+            available_cars = ["Toyota", "Corolla"]
+        elif 200001 <= amount <= 300000:
+            available_cars = ["Honda", "Civic"]
+        elif 300001 <= amount <= 1000000:
+            available_cars = ["BMW", "Mercedes"]
+        else:
+            messagebox.showinfo("Information", "There are no cars available at this price")
+            return
+
+        selected_car = simpledialog.askstring("Car Selection", "Enter the type of car you want:",
+                                              initialvalue=available_cars[0],
+                                              parent=self.root)
+
+        if selected_car not in available_cars:
+            messagebox.showerror("Error", "Invalid car selection")
+            return
+
+        car_model = simpledialog.askstring("Car Selection", "Enter the model number:",
+                                           parent=self.root)
+
+        car = Car(selected_car, car_model)
+        self.cars.append(car)
+
+        messagebox.showinfo("Information",
+                            f"A car has been selected: {car.brand} {car.model}\nThank you for dealing with us")
+
+
+showroom = CarShowroom()
